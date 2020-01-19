@@ -3,7 +3,7 @@ const Dev = require('../models/Dev');
 module.exports = {
     async index(request, response) {
         const { latitude, longitude, techs } = request.query
-        
+
         const techsArray = techs.split(',').map(tech => tech.trim())
 
         const devs = await Dev.find({
@@ -15,14 +15,14 @@ module.exports = {
                     $geometry: {
                         type: 'Point',
                         coordinates: [longitude, latitude],
-                    }
+                    },
+                    $maxDistance: 10000,
                 },
-                $maxDistance: 10000,
             }
         });
 
         console.log(techsArray);
-        
-        return response.json(devs)
+
+        return response.json({ devs })
     }
 }
